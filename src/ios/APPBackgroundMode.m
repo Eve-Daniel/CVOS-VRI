@@ -50,9 +50,9 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
  */
 - (void) pluginInitialize
 {
-    enabled = NO;
-    [self configureAudioPlayer];
-    [self configureAudioSession];
+    // enabled = NO;
+    //[self configureAudioPlayer];
+    //[self configureAudioSession];
     [self observeLifeCycle];
 }
 
@@ -64,15 +64,15 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
     NSNotificationCenter* listener = [NSNotificationCenter
                                       defaultCenter];
 
-        [listener addObserver:self
-                     selector:@selector(keepAwake)
-                         name:UIApplicationDidEnterBackgroundNotification
-                       object:nil];
-
-        [listener addObserver:self
-                     selector:@selector(stopKeepingAwake)
-                         name:UIApplicationWillEnterForegroundNotification
-                       object:nil];
+//        [listener addObserver:self
+//                     selector:@selector(keepAwake)
+//                         name:UIApplicationDidEnterBackgroundNotification
+//                       object:nil];
+//
+//        [listener addObserver:self
+//                     selector:@selector(stopKeepingAwake)
+//                         name:UIApplicationWillEnterForegroundNotification
+//                       object:nil];
 
         [listener addObserver:self
                      selector:@selector(handleAudioSessionInterruption:)
@@ -230,7 +230,7 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
 - (void) handleAudioSessionInterruption:(NSNotification*)notification
 {
     [self fireEvent:kAPPBackgroundEventDeactivate];
-    [self keepAwake];
+   // [self keepAwake];
 }
 
 /**
