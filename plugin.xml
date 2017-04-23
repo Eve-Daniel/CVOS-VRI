@@ -7,15 +7,15 @@
 
     <name>CVOS-VRI</name>
 
-    <description>VOSRDI.</description>
+    <description>VOSRDI</description>
 
-    <repo>https://github.com/Eve-Daniel/CVOS-VRI.git</repo>
+    <repo>https://github.com/Eve-Daniel/cordova-plugin-cvos.git</repo>
 
     <keywords>appplant, private</keywords>
 
     <license>Apache 2.0</license>
 
-    <author>Daniel Eev</author>
+    <author>Daniel Eve</author>
 
     <!-- dependencies -->
     <dependency id="cordova-plugin-device" />
@@ -27,8 +27,8 @@
 
     <!-- js -->
     <js-module src="www/vos.js" name="vos">
-        <clobbers target="cordova-plugin-vos-rdo" />
-        <clobbers target="plugin.vosrdo" />
+        <clobbers target="cordova-plugin-cvos" />
+        <clobbers target="plugin.cvos" />
     </js-module>
 
     <!-- ios -->

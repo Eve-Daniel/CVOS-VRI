@@ -4,7 +4,7 @@
   "description": "Prevent app from going to sleep in background.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Eve-Daniel/CVOS-VRI.git"
+    "url": "git+https://github.com/Eve-Daniel/cordova-plugin-cvos.git"
   },
   "keywords": [
     "appplant",
@@ -25,7 +25,7 @@
   "author": "Daniel Eve ",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/Eve-Daniel/CVOS-VRI/issues"
+    "url": "https://github.com/Eve-Daniel/cordova-plugin-cvos/issues"
   },
-  "homepage": "https://github.com/Eve-Daniel/CVOS-VRI#readme"
+  "homepage": "https://github.com/Eve-Daniel/cordova-plugin-cvos#readme"
 }
