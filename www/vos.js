@@ -43,14 +43,14 @@ exports.enable = function() {
             exports.fireEvent('enable');
         };
 
-    cordova.exec(fn, function (a){alert(JSON.stringify(a));}, 'BackgroundMode', 'enable', []);
+    cordova.exec(fn, function (a){alert(JSON.stringify(a));}, 'cvos', 'enable', []);
 };
 exports.rejectSound = function() {
     
     var fn = function() {
         };
 
-    cordova.exec(fn, function (a){alert(JSON.stringify(a));}, 'BackgroundMode', 'rejectSound', []);
+    cordova.exec(fn, function (a){alert(JSON.stringify(a));}, 'cvos', 'rejectSound', []);
 };
 
 exports.enable2 = function() {
@@ -62,7 +62,7 @@ exports.enable2 = function() {
             exports.fireEvent('enable');
         };
 
-    cordova.exec(fn, function (a){alert(JSON.stringify(a));}, 'BackgroundMode', 'enable2', []);
+    cordova.exec(fn, function (a){alert(JSON.stringify(a));}, 'cvos', 'enable2', []);
 };
 
 
@@ -81,7 +81,7 @@ exports.disable = function() {
             exports.fireEvent('disable');
         };
 
-    cordova.exec(fn, function (a){alert(JSON.stringify(a));}, 'BackgroundMode', 'disable', []);
+    cordova.exec(fn, function (a){alert(JSON.stringify(a));}, 'cvos', 'disable', []);
 };
 
 /**
@@ -134,7 +134,7 @@ exports.setDefaults = function (overrides) {
     }
 
     if (this._isAndroid) {
-        cordova.exec(null, null, 'BackgroundMode', 'configure', [defaults, false]);
+        cordova.exec(null, null, 'cvos', 'configure', [defaults, false]);
     }
 };
 
@@ -162,7 +162,7 @@ exports.configure = function (options) {
     this._mergeObjects(options, defaults);
     this._settings = options;
 
-    cordova.exec(null, null, 'BackgroundMode', 'configure', [options, true]);
+    cordova.exec(null, null, 'cvos', 'configure', [options, true]);
 };
 
 /**
@@ -172,7 +172,7 @@ exports.configure = function (options) {
  */
 exports.disableWebViewOptimizations = function() {
     if (this._isAndroid) {
-        cordova.exec(null, null, 'BackgroundMode', 'optimizations', []);
+        cordova.exec(null, null, 'cvos', 'optimizations', []);
     }
 };
 
@@ -183,7 +183,7 @@ exports.disableWebViewOptimizations = function() {
  */
 exports.moveToBackground = function() {
     if (this._isAndroid) {
-        cordova.exec(null, null, 'BackgroundMode', 'background', []);
+        cordova.exec(null, null, 'cvos', 'background', []);
     }
 };
 
@@ -194,7 +194,7 @@ exports.moveToBackground = function() {
  */
 exports.moveToForeground = function() {
     if (this.isActive() && this._isAndroid) {
-        cordova.exec(null, null, 'BackgroundMode', 'foreground', []);
+        cordova.exec(null, null, 'cvos', 'foreground', []);
     }
 };
 
@@ -230,7 +230,7 @@ exports.overrideBackButton = function() {
  */
 exports.isScreenOff = function (fn) {
     if (this._isAndroid) {
-        cordova.exec(fn, null, 'BackgroundMode', 'dimmed', []);
+        cordova.exec(fn, null, 'cvos', 'dimmed', []);
     } else {
         fn(undefined);
     }
@@ -243,7 +243,7 @@ exports.isScreenOff = function (fn) {
  */
 exports.wakeUp = function() {
     if (this._isAndroid) {
-        cordova.exec(null, null, 'BackgroundMode', 'wakeup', []);
+        cordova.exec(null, null, 'cvos', 'wakeup', []);
     }
 };
 
@@ -254,7 +254,7 @@ exports.wakeUp = function() {
  */
 exports.unlock = function() {
     if (this._isAndroid) {
-        cordova.exec(null, null, 'BackgroundMode', 'unlock', []);
+        cordova.exec(null, null, 'cvos', 'unlock', []);
     }
 };
 

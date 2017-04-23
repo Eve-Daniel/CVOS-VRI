@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        id="cordova-plugin-vos-rdo"
+        id="cordova-plugin-cvos"
         version="0.0.1">
 
     <name>CVOS-VRI</name>
@@ -26,9 +26,10 @@
     </engines>
 
     <!-- js -->
-    <js-module src="www/vos.js" name="vos">
+    <js-module src="www/vos.js" name="cvos">
         <clobbers target="cordova-plugin-cvos" />
         <clobbers target="plugin.cvos" />
+        <clobbers target="cvos" />
     </js-module>
 
     <!-- ios -->
