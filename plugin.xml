@@ -30,6 +30,7 @@
         <clobbers target="cordova-plugin-cvos" />
         <clobbers target="plugin.cvos" />
         <clobbers target="cvos" />
+        <clobbers target="cordova.plugins.cvos" />        
     </js-module>
 
     <!-- ios -->
