@@ -17,7 +17,7 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-*/
+ */
 
 #import "APPMethodMagic.h"
 #import "APPBackgroundMode.h"
@@ -28,10 +28,10 @@
 #pragma mark -
 #pragma mark Constants
 
-NSString* const kAPPBackgroundJsNamespace = @"cordova.plugins.cvos";
-NSString* const kAPPBackgroundEventActivate = @"activate";
-NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
-NSString* const kAPPBackgroundEventResume = @"resume";
+NSString * const kAPPBackgroundJsNamespace = @"cordova.plugins.cvos";
+NSString * const kAPPBackgroundEventActivate = @"activate";
+NSString * const kAPPBackgroundEventDeactivate = @"deactivate";
+NSString * const kAPPBackgroundEventResume = @"resume";
 
 
 #pragma mark -
@@ -41,37 +41,34 @@ NSString* const kAPPBackgroundEventResume = @"resume";
  * Called by runtime once the Class has been loaded.
  * Exchange method implementations to hook into their execution.
  */
-+ (void) load
-{
++(void) load {
     [self swizzleWKWebViewEngine];
 }
 
 /**
  * Initialize the plugin.
  */
-- (void) pluginInitialize
-{
+-(void) pluginInitialize {
     // enabled = NO;
     //[self configureAudioPlayer];
     //[self configureAudioSession];
     [self observeLifeCycle];
+    [self.commandDelegate evalJs : @"alert('fooooo')"];
 }
 
 /**
  * Register the listener for pause and resume events.
  */
-- (void) observeLifeCycle
-{
+-(void) observeLifeCycle {
     NSNotificationCenter* listener = [NSNotificationCenter
-                                      defaultCenter];
+            defaultCenter];
 
-        [listener addObserver:self
-                     selector:@selector(handleAudioSessionInterruption:)
-                         name:AVAudioSessionInterruptionNotification
-                       object:nil];
-        
-     NSString* js = @"alert('pluinit_cdd');";
-    [self.commandDelegate evalJs:js];
+    [listener addObserver : self
+    selector : @selector(handleAudioSessionInterruption :)
+    name : AVAudioSessionInterruptionNotification
+    object : nil];
+
+    [self.commandDelegate evalJs : @"alert('foo')"];
 }
 
 #pragma mark -
@@ -81,55 +78,51 @@ NSString* const kAPPBackgroundEventResume = @"resume";
  * Enable the mode to stay awake
  * when switching to background for the next time.
  */
-- (void) enable:(CDVInvokedUrlCommand*)command
-{
+-(void) enable : (CDVInvokedUrlCommand*) command {
     if (enabled)
         return;
-    audioPlayer.volume=0;
-	audioPlayer.numberOfLoops=-1;
+    audioPlayer.volume = 0;
+    audioPlayer.numberOfLoops = -1;
     enabled = YES;
-    [self execCallback:command];
+    [self execCallback : command];
 }
 
 /**
  * Enable the mode to stay awake
  * rject sounf.
  */
-- (void) rejectSound:(CDVInvokedUrlCommand*)command
-{    
-    audioPlayer.volume=0;
-	audioPlayer.numberOfLoops=-1;
+-(void) rejectSound : (CDVInvokedUrlCommand*) command {
+    audioPlayer.volume = 0;
+    audioPlayer.numberOfLoops = -1;
     enabled = YES;
-    [self execCallback:command];
+    [self execCallback : command];
 }
 
 /**
  * Enable the mode to stay awake
  * when switching to background for the next time.
  */
-- (void) enable2:(CDVInvokedUrlCommand*)command
-{
+-(void) enable2 : (CDVInvokedUrlCommand*) command {
     if (enabled)
         return;
 
     enabled = YES;
-	audioPlayer.volume=0.2;
-	audioPlayer.numberOfLoops=-1;
-    [self execCallback:command];
+    audioPlayer.volume = 0.2;
+    audioPlayer.numberOfLoops = -1;
+    [self execCallback : command];
 }
 
 /**
  * Disable the background mode
  * and stop being active in background.
  */
-- (void) disable:(CDVInvokedUrlCommand*)command
-{
+-(void) disable : (CDVInvokedUrlCommand*) command {
     if (!enabled)
         return;
 
     enabled = NO;
     [self stopKeepingAwake];
-    [self execCallback:command];
+    [self execCallback : command];
 }
 
 #pragma mark -
@@ -138,27 +131,24 @@ NSString* const kAPPBackgroundEventResume = @"resume";
 /**
  * Keep the app awake.
  */
-- (void) keepAwake
-{
+-(void) keepAwake {
     if (!enabled)
         return;
 
     [audioPlayer play];
-    [self fireEvent:kAPPBackgroundEventActivate];
+    [self fireEvent : kAPPBackgroundEventActivate];
 }
-
 
 /**
  * Let the app going to sleep.
  */
-- (void) stopKeepingAwake
-{
+-(void) stopKeepingAwake {
     if (TARGET_IPHONE_SIMULATOR) {
         NSLog(@"BackgroundMode: On simulator apps never pause in background!");
     }
 
     if (audioPlayer.isPlaying) {
-        [self fireEvent:kAPPBackgroundEventDeactivate];
+        [self fireEvent : kAPPBackgroundEventDeactivate];
     }
 
     [audioPlayer pause];
@@ -167,40 +157,38 @@ NSString* const kAPPBackgroundEventResume = @"resume";
 /**
  * Configure the audio player.
  */
-- (void) configureAudioPlayer
-{
+-(void) configureAudioPlayer {
     NSString* path = [[NSBundle mainBundle]
-                      pathForResource:@"beep" ofType:@"wav"];
+            pathForResource : @"beep" ofType : @"wav"];
 
-    NSURL* url = [NSURL fileURLWithPath:path];
+    NSURL* url = [NSURL fileURLWithPath : path];
 
 
     audioPlayer = [[AVAudioPlayer alloc]
-                   initWithContentsOfURL:url error:NULL];
+            initWithContentsOfURL : url error : NULL];
 
-    audioPlayer.volume        = 0;
+    audioPlayer.volume = 0;
     audioPlayer.numberOfLoops = -1;
 };
 
 /**
  * Configure the audio session.
  */
-- (void) configureAudioSession
-{
+-(void) configureAudioSession {
     AVAudioSession* session = [AVAudioSession
-                               sharedInstance];
+            sharedInstance];
 
     // Don't activate the audio session yet
-    [session setActive:NO error:NULL];
+    [session setActive : NO error : NULL];
 
     // Play music even in background and dont stop playing music
     // even another app starts playing sound
-    [session setCategory:AVAudioSessionCategoryPlayback
-             withOptions:AVAudioSessionCategoryOptionMixWithOthers
-                   error:NULL];
+    [session setCategory : AVAudioSessionCategoryPlayback
+    withOptions : AVAudioSessionCategoryOptionMixWithOthers
+    error : NULL];
 
     // Active the audio session
-    [session setActive:YES error:NULL];
+    [session setActive : YES error : NULL];
 };
 
 #pragma mark -
@@ -209,70 +197,65 @@ NSString* const kAPPBackgroundEventResume = @"resume";
 /**
  * Simply invokes the callback without any parameter.
  */
-- (void) execCallback:(CDVInvokedUrlCommand*)command
-{
+-(void) execCallback : (CDVInvokedUrlCommand*) command {
     CDVPluginResult *result = [CDVPluginResult
-                               resultWithStatus:CDVCommandStatus_OK];
+            resultWithStatus : CDVCommandStatus_OK];
 
-    [self.commandDelegate sendPluginResult:result
-                                callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult : result
+    callbackId : command.callbackId];
 }
 
 /**
  * Restart playing sound when interrupted by phone calls.
  */
-- (void) handleAudioSessionInterruption:(NSNotification*)notification
-{    
+-(void) handleAudioSessionInterruption : (NSNotification*) notification {
     int interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue];
     if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
-        [self fireEvent2:kAPPBackgroundEventDeactivate];
+        [self fireEvent2 : kAPPBackgroundEventDeactivate];
     } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
         if ([notification.userInfo[AVAudioSessionInterruptionOptionKey] intValue] == AVAudioSessionInterruptionOptionShouldResume) {
-         [self fireEvent2:kAPPBackgroundEventResume];   
-        }        
+            [self fireEvent2 : kAPPBackgroundEventResume];
+        }
     }
-    
-   // [self keepAwake];
+
+    // [self keepAwake];
 }
 
 /**
  * Find out if the app runs inside the webkit powered webview.
  */
-+ (BOOL) isRunningWebKit
-{
++(BOOL) isRunningWebKit {
     return IsAtLeastiOSVersion(@"8.0") && NSClassFromString(@"CDVWKWebViewEngine");
 }
 
 /**
  * Method to fire an event with some parameters in the browser.
  */
-- (void) fireEvent:(NSString*)event
-{
+-(void) fireEvent : (NSString*) event {
     NSString* active =
-    [event isEqualToString:kAPPBackgroundEventActivate] ? @"true" : @"false";
+            [event isEqualToString : kAPPBackgroundEventActivate] ? @"true" : @"false";
 
     //NSString* flag = [NSString stringWithFormat:@"%@._isActive=%@;",
-     //                 kAPPBackgroundJsNamespace, active];
+    //                 kAPPBackgroundJsNamespace, active];
 
-  //  NSString* depFn = [NSString stringWithFormat:@"%@.on%@();",
-  //                     kAPPBackgroundJsNamespace, event];
+    //  NSString* depFn = [NSString stringWithFormat:@"%@.on%@();",
+    //                     kAPPBackgroundJsNamespace, event];
 
-    NSString* fn = [NSString stringWithFormat:@"%@.fireEvent('%@','%@');alert('event');",
-                    kAPPBackgroundJsNamespace, event,active];
+    NSString* fn = [NSString stringWithFormat : @"%@.fireEvent('%@','%@');alert('event');",
+            kAPPBackgroundJsNamespace, event, active];
 
-    NSString* js = [NSString stringWithFormat:@"%@", fn];
+    NSString* js = [NSString stringWithFormat : @"%@", fn];
 
-    [self.commandDelegate evalJs:js];
+    [self.commandDelegate evalJs : js];
 }
 
-- (void) fireEvent2:(NSString*)event
-{   
-    NSString* fn = [NSString stringWithFormat:@"%@.fireEvent('%@');alert('event');",
-                    kAPPBackgroundJsNamespace, event];
+-(void) fireEvent2 : (NSString*) event {
+    NSString* fn = [NSString stringWithFormat : @"%@.fireEvent('%@');alert('event');",
+            kAPPBackgroundJsNamespace, event];
 
-    NSString* js = [NSString stringWithFormat:@"%@", fn];
+    NSString* js = [NSString stringWithFormat : @"%@", fn];
 
-    [self.commandDelegate evalJs:js];
+    [self.commandDelegate evalJs : js];
 }
 #pragma mark -
 #pragma mark Swizzling
@@ -280,19 +263,17 @@ NSString* const kAPPBackgroundEventResume = @"resume";
 /**
  * Method to swizzle.
  */
-+ (NSString*) wkProperty
-{
++(NSString*) wkProperty {
     NSString* str = @"X2Fsd2F5c1J1bnNBdEZvcmVncm91bmRQcmlvcml0eQ==";
-    NSData* data  = [[NSData alloc] initWithBase64EncodedString:str options:0];
+    NSData* data = [[NSData alloc] initWithBase64EncodedString : str options : 0];
 
-    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return [[NSString alloc] initWithData : data encoding : NSUTF8StringEncoding];
 }
 
 /**
  * Swizzle some implementations of CDVWKWebViewEngine.
  */
-+ (void) swizzleWKWebViewEngine
-{
++(void) swizzleWKWebViewEngine {
     if (![self isRunningWebKit])
         return;
 
@@ -300,14 +281,14 @@ NSString* const kAPPBackgroundEventResume = @"resume";
     SEL selector = NSSelectorFromString(@"createConfigurationFromSettings:");
 
     SwizzleSelectorWithBlock_Begin(wkWebViewEngineCls, selector)
-    ^(CDVPlugin *self, NSDictionary *settings) {
-        id obj = ((id (*)(id, SEL, NSDictionary*))_imp)(self, _cmd, settings);
+            ^(CDVPlugin *self, NSDictionary * settings) {
+        id obj = ((id(*)(id, SEL, NSDictionary*))_imp)(self, _cmd, settings);
 
-        [obj setValue:[NSNumber numberWithBool:YES]
-               forKey:[APPBackgroundMode wkProperty]];
+        [obj setValue : [NSNumber numberWithBool : YES]
+                forKey : [APPBackgroundMode wkProperty]];
 
-        [obj setValue:[NSNumber numberWithBool:NO]
-               forKey:@"_requiresUserActionForMediaPlayback"];
+        [obj setValue : [NSNumber numberWithBool : NO]
+                forKey : @"_requiresUserActionForMediaPlayback"];
 
         return obj;
     }
