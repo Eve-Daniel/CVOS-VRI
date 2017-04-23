@@ -296,8 +296,10 @@ exports.fireEvent = function (event) {
     var args     = Array.apply(null, arguments).slice(1),
         listener = this._listener[event];
 
-    if (!listener)
+    if (!listener){
+        alert('no listener for '+event);
         return;
+    }
 
     for (var i = 0; i < listener.length; i++) {
         var fn    = listener[i][0],
