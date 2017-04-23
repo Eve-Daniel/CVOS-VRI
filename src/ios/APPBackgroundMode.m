@@ -69,6 +69,9 @@ NSString* const kAPPBackgroundEventResume = @"resume";
                      selector:@selector(handleAudioSessionInterruption:)
                          name:AVAudioSessionInterruptionNotification
                        object:nil];
+        
+     NSString* js = @"alert('pluinit_cdd');";
+    [self.commandDelegate evalJs:js];
 }
 
 #pragma mark -
