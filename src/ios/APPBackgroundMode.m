@@ -31,6 +31,7 @@
 NSString* const kAPPBackgroundJsNamespace = @"cordova.plugins.cvos";
 NSString* const kAPPBackgroundEventActivate = @"activate";
 NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
+NSString* const kAPPBackgroundEventResume = @"resume";
 
 
 #pragma mark -
@@ -63,16 +64,6 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
 {
     NSNotificationCenter* listener = [NSNotificationCenter
                                       defaultCenter];
-
-//        [listener addObserver:self
-//                     selector:@selector(keepAwake)
-//                         name:UIApplicationDidEnterBackgroundNotification
-//                       object:nil];
-//
-//        [listener addObserver:self
-//                     selector:@selector(stopKeepingAwake)
-//                         name:UIApplicationWillEnterForegroundNotification
-//                       object:nil];
 
         [listener addObserver:self
                      selector:@selector(handleAudioSessionInterruption:)
@@ -228,8 +219,16 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
  * Restart playing sound when interrupted by phone calls.
  */
 - (void) handleAudioSessionInterruption:(NSNotification*)notification
-{
-    [self fireEvent:kAPPBackgroundEventDeactivate];
+{    
+    int interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue];
+    if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
+        [self fireEvent2:kAPPBackgroundEventDeactivate];
+    } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
+        if ([notification.userInfo[AVAudioSessionInterruptionOptionKey] intValue] == AVAudioSessionInterruptionOptionShouldResume) {
+         [self fireEvent2:kAPPBackgroundEventResume];   
+        }        
+    }
+    
    // [self keepAwake];
 }
 
@@ -255,7 +254,7 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
   //  NSString* depFn = [NSString stringWithFormat:@"%@.on%@();",
   //                     kAPPBackgroundJsNamespace, event];
 
-    NSString* fn = [NSString stringWithFormat:@"%@.fireEvent('%@','%@');",
+    NSString* fn = [NSString stringWithFormat:@"%@.fireEvent('%@','%@');alert('event');",
                     kAPPBackgroundJsNamespace, event,active];
 
     NSString* js = [NSString stringWithFormat:@"%@", fn];
@@ -263,6 +262,15 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
     [self.commandDelegate evalJs:js];
 }
 
+- (void) fireEvent2:(NSString*)event
+{   
+    NSString* fn = [NSString stringWithFormat:@"%@.fireEvent('%@');alert('event');",
+                    kAPPBackgroundJsNamespace, event];
+
+    NSString* js = [NSString stringWithFormat:@"%@", fn];
+
+    [self.commandDelegate evalJs:js];
+}
 #pragma mark -
 #pragma mark Swizzling
 
