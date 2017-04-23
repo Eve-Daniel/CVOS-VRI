@@ -292,6 +292,7 @@ exports._listener = {};
  * @return [ Void ]
  */
 exports.fireEvent = function (event) {
+    alert(JSON.stringify(event));
     var args     = Array.apply(null, arguments).slice(1),
         listener = this._listener[event];
 
